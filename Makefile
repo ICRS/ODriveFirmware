@@ -13,7 +13,7 @@ TARGET = ODriveFirmware
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -O0
+OPT = -O0 -ffast-math
 
 #######################################
 # pathes
@@ -94,21 +94,35 @@ BIN = $(CP) -O binary -S
 #######################################
 # macros for gcc
 AS_DEFS =
-C_DEFS = -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F405xx
+C_DEFS = -D__weak="__attribute__((weak))" -D__packed="__attribute__((__packed__))" -DUSE_HAL_DRIVER -DSTM32F405xx
 # includes for gcc
 AS_INCLUDES =
-C_INCLUDES = -IInc
-C_INCLUDES += -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
+
+C_INCLUDES = -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
 C_INCLUDES += -IMiddlewares/Third_Party/FreeRTOS/Source/include
 C_INCLUDES += -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
 C_INCLUDES += -IMiddlewares/ST/STM32_USB_Device_Library/Core/Inc
 C_INCLUDES += -IMiddlewares/ST/STM32_USB_Device_Library/Class/HID/Inc
+C_INCLUDES += -IDrivers/DRV8301
 C_INCLUDES += -IDrivers/STM32F4xx_HAL_Driver/Inc
 C_INCLUDES += -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy
-C_INCLUDES += -IDrivers/CMSIS/Include
 C_INCLUDES += -IDrivers/CMSIS/Device/ST/STM32F4xx/Include
-C_INCLUDES += -IDrivers/DRV8301
+C_INCLUDES += -IDrivers/CMSIS/Include
+C_INCLUDES += -IInc
 C_INCLUDES += -IMotorControl
+
+
+# C_INCLUDES = -IInc
+# C_INCLUDES += -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
+# C_INCLUDES += -IMiddlewares/Third_Party/FreeRTOS/Source/include
+# C_INCLUDES += -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
+# C_INCLUDES += -IMiddlewares/ST/STM32_USB_Device_Library/Core/Inc
+# C_INCLUDES += -IMiddlewares/ST/STM32_USB_Device_Library/Class/HID/Inc
+# C_INCLUDES += -IDrivers/STM32F4xx_HAL_Driver/Inc
+# C_INCLUDES += -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy
+# C_INCLUDES += -IDrivers/CMSIS/Include
+# C_INCLUDES += -IDrivers/CMSIS/Device/ST/STM32F4xx/Include
+# C_INCLUDES += -IDrivers/DRV8301
 # compile gcc flags
 ASFLAGS = -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 CFLAGS = -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -124,9 +138,9 @@ CFLAGS += -std=c99 -MD -MP -MF .dep/$(@F).d
 # link script
 LDSCRIPT = STM32F405RGTx_FLASH.ld
 # libraries
-LIBS = -lc -lm -lnosys
-LIBDIR =
-LDFLAGS = -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
+LIBS = -lc -lm -lnosys -larm_cortexM4lf_math
+LIBDIR = -LDrivers/CMSIS/Lib
+LDFLAGS = -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -specs=nano.specs $(OPT) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
