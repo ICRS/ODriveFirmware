@@ -156,7 +156,7 @@ http://www.st.com/content/ccc/resource/technical/document/reference_manual/3d/6d
 http://www.cnblogs.com/shangdawei/p/4712376.html
 http://www.chibios.com/forum/viewtopic.php?t=699
 
-3. In `Inc/` modify the line `#define USBD_DEBUG_LEVEL     0` to enable debugging and see what the debug messages are. Might be helpful
+3. In `Inc/usbd_conf.h` modify the line `#define USBD_DEBUG_LEVEL     0` to enable debugging and see what the debug messages are. Might be helpful
 
 3. Read the whole usb cdc documention and figure out what is wrong.
 
