@@ -143,7 +143,10 @@ void StartDefaultTask(void const * argument)
 extern USBD_HandleTypeDef hUsbDeviceFS;
 void usb_cdc_thread (void const * unused_argument) {
 	osDelay(5100);
+  uint8_t HiMsg[] = "hello\r\n";
 	while (1) {
+    CDC_Transmit_FS(HiMsg, strlen(HiMsg));
+    HAL_Delay(200);
 		osDelay(10);
 	}
 }

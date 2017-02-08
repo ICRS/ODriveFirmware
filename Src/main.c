@@ -87,7 +87,7 @@ int main(void)
   /* MCU Configuration----------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+  HAL_Init();
 
   /* Configure the system clock */
   SystemClock_Config();
@@ -109,9 +109,7 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 
-  //Required to use OC4 for ADC triggering.
-  OC4_PWM_Override(&htim1);
-  OC4_PWM_Override(&htim8);
+  /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
   MX_FREERTOS_Init();

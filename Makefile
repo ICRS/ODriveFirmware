@@ -158,10 +158,10 @@ $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
 	
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
+	$(BIN) $< $@    
 	
 $(BUILD_DIR):
-	mkdir -p $@		
+	mkdir -p $@     
 
 
 debug: build/ODriveFirmware.elf
